@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Graph Explorer</title>
+    <link rel="stylesheet" type="text/css" href="static/styles.css">
+    <script type="module" src="static/graph.js"></script>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <h1><a href="index.html">Graph Explorer</a></h1>
+            <div class="header-controls">
+                <nav>
+                    <button class="dropdown-toggle">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </button>
+
+
+                    <ul class="dropdown-items" role="menu">
+                    <div class="slider-container">
+                        <li>
+                        <label for="edge-size">Edge Size:</label>
+                        <input type="range" id="edge-size" min="0" max="100" value="50">
+                        </li>
+
+                        <li>
+                        <label for="attraction-strength">Attraction Strength:</label>
+                        <input type="range" id="attraction-strength" min="0" max="100" value="50">
+                        </li>
+
+                        <li>
+                        <label for="repulsion-strength">Repulsion Strength:</label>
+                        <input type="range" id="repulsion-strength" min="0" max="100" value="50">
+                        </li>
+                    </div>
+                    </ul>
+
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        
+        <div class="graph" id="graph-1">
+            
+            <svg class="graph-canvas" viewBox="0 0 600 400">
+
+                <!-- Edges -->
+                <g class="edges">
+                    <line class="edge"
+                          left-node="A"
+                          right-node="B"
+                          x1="150" y1="100"
+                          x2="300" y2="200" />
+
+                    <line class="edge"
+                          left-node="A"
+                          right-node="C"
+                          x1="150" y1="100"
+                          x2="450" y2="200" />
+
+
+                    <line class="edge"
+                          left-node="B"
+                          right-node="C"
+                          x1="300" y1="200"
+                          x2="450" y2="200" />
+                </g>
+
+                <!-- Nodes -->
+                <g class="nodes">
+                    <g class="node" data-node-id="A" transform="translate(150, 100)">
+                        <circle r="24" />
+                        <text text-anchor="middle" dy="5">A</text>
+                    </g>
+
+                    <g class="node" data-node-id="B" transform="translate(300, 200)">
+                        <circle r="24" />
+                        <text text-anchor="middle" dy="5">B</text>
+                    </g>
+
+                    <g class="node" data-node-id="C" transform="translate(450, 200)">
+                        <circle r="24" />
+                        <text text-anchor="middle" dy="5">C</text>
+                    </g>
+                </g>
+
+            </svg>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 All Project Team Members</p>
+    </footer>
+
+</body>
+</html>

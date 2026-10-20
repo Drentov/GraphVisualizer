@@ -1,0 +1,294 @@
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body{
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	line-height: 1.6;
+	color: #333;
+	background-color: #E0E5EF;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+  min-height: 100vh;
+}
+
+.container{
+	width: 100%;
+	margin: 0 auto;
+	padding: 0 20px;
+
+}
+
+header {
+  background: linear-gradient(90deg, #E4B33E 0%, #FF7E00 100%);
+  color: white;
+  padding: 0.5rem 0;
+  position: sticky; /*this makes the header stick to the top!*/
+  top: 0;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+header .container{
+	display: flex; /*this makes stuff next to each other*/
+	justify-content: space-between;
+	align-items: center; /*centers the title bar*/
+	flex-wrap: wrap;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* spacing between burger and login button */
+}
+
+header h1{
+	font-size: 2.1rem;
+	text-shadow: 1px 2px 1px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
+}
+
+header h1:hover{
+  background: #EBBA66;
+}
+
+header h1 a{
+  text-decoration: none;
+  color: white;
+}
+
+.dropdown-toggle{
+	background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 43px;
+  padding: 0px;
+  margin: 10px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+  line-height: 0;
+}
+
+
+.dropdown-toggle .bar { /*remember, subpixel rendering really can mess things up*/
+  display: flex;
+  height: 6px;                       
+  width: 77%;                        
+  background-color: white;
+  border-radius: 2px;        
+}
+
+.dropdown-toggle:hover{
+  background-color: #EBBA66;
+}
+
+
+.dropdown-items {
+	position: absolute;
+  right: 20px;
+  top: 70px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  list-style: none;
+  padding: 0.0rem 0;
+  margin: 0;
+  display: none;           /* hidden by default */
+  flex-direction: column;
+  min-width: 400px;
+  z-index: 200;
+}
+
+.dropdown-items li{
+	width: 100%;
+}
+
+.dropdown-items li {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: #333;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  background: white;
+}
+
+.dropdown-items li:first-child {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.dropdown-items li:last-child {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  margin-bottom: 0rem;
+}
+
+.dropdown-items li:hover {
+  background-color: #EBBA66;
+}
+
+.dropdown-items.show{
+  display: flex;
+}
+
+.field p{
+  display: none;
+}
+
+.field.error p{
+  display: block;
+  color: red;
+}
+
+.field.error input{
+  border: solid red;
+}
+
+.slider-container{
+  background-color: #4A6580;
+  border-radius: 10px;
+  color:black;
+  font-size: 1.3rem;
+  font-weight: 0.3rem;
+}
+
+.slider-container li{
+  margin-bottom: 0.15rem;
+  padding: 0.19rem 0.9rem;
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+}
+
+.slider-container li label{
+  padding-right: 1rem;
+}
+
+.slider-container li input{
+  min-width: 170px;
+}
+
+/*moving onto the main content*/
+
+main{
+	padding: 2rem 0;
+	min-height: calc(100vh - 200px);
+	flex: 1 0 auto;
+}
+
+main h2{
+	text-align: center;
+	margin-bottom: 2rem;
+	color: #2C3E50;
+	font-size: 2rem;
+	padding-top: 0.5rem;
+	/*border-bottom: 2px solid #eaeaea;*/
+}
+
+.btn{
+  display: inline-block;
+  background-color: #4A6580;
+  color: white;
+  padding:0.7rem 1.5rem;
+  text-decoration: none; /*removes the underline*/
+  border-radius: 10px; /*again, this rounds the corners*/
+  transition: background-color 0.3s;
+  margin-top: 1rem;
+  border: none;
+  font-size: 1.03rem;
+  font-weight: 500;
+}
+
+.btn:hover{
+	background-color: #2C3E50;
+}
+
+footer{
+	background-color: #2C3E50;
+	color: white;
+	text-align: center;
+	padding: 0.5rem 0;
+	flex-shrink: 0;
+}
+
+
+/*Graph section*/
+
+.graph-canvas {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+}
+
+.edge {
+  stroke: #3498db;
+  stroke-width: 3;
+  pointer-events: stroke;
+}
+
+.edge:hover{ /*nothing...*/
+  stroke: darkblue;
+  stroke-width: 5;
+}
+
+.node circle {
+  fill: #3498db;
+  stroke: #1f618d;
+  stroke-width: 2;
+}
+
+.node circle:hover{
+  fill: darkblue;
+  stroke-width: 0;
+}
+
+.node text {
+  fill: white;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+
+
+/*responsive design section incoming*/
+/*the point of this is to moke the webpage look good on many different devices*/
+
+@media (max-width: 768px){
+	header .container{
+	 justify-content: space-evenly;
+  }
+
+	nav ul{
+		justify-content: center;
+		margin-top: 1rem;
+	}
+	.bookstore-grid{
+		grid-template-columns: 1fr;
+	}
+}
+
+
+.error-message {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* vertical centering */
+    align-items: center;     /* horizontal centering */
+    min-height: 100vh;       /* take full screen height */
+    text-align: center;
+}
+
+.error-message h1 {
+    color: red;
+}
