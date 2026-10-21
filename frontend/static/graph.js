@@ -296,6 +296,40 @@ class LayoutAdjustmentCalculator{
 }
 
 
+class LayoutConfigManager{
+	/**
+	* @param {LayoutAdjustmentCalculator} calculator_object
+	*/
+	constructor(calculator_object){
+
+		/** @type {LayoutAdjustmentCalculator} */
+		this.calculator_object = calculator_object;
+
+		/** @type {HTMLInputElement} */
+		this.DOM_repulsion = document.getElementById("repulsion");
+	    
+	    /** @type {HTMLInputElement} */
+	    this.DOM_attraction = document.getElementById("attraction");
+	    
+	    /** @type {HTMLInputElement} */
+	    this.DOM_damping = document.getElementById("damping");
+	
+	    //Registering listeners
+
+	    this.DOM_repulsion.addEventListener("input", () => {
+	    	this.calculator_object.kRepulsion = Number(this.DOM_repulsion.value);
+	    });
+
+	    this.DOM_attraction.addEventListener("input", () => {
+	    	this.calculator_object.kAttraction = Number(this.DOM_attraction.value);
+	    });
+
+    	this.DOM_damping.addEventListener("input", () => {
+	    	this.calculator_object.damping = Number(this.DOM_damping.value);
+	    });
+	}
+}
+
 
 function test_Nodes(){
 
@@ -365,9 +399,13 @@ function test_Edges(){ //OUTDATED!!!
 function test_Graph(){
 
 	let layout_calculator = new LayoutAdjustmentCalculator();
+	new LayoutConfigManager(layout_calculator); //Makes the sliders work!
+
 	let DOM_graph = document.querySelector(".graph");
 	let graph = new Graph(DOM_graph, layout_calculator);
-	console.log(graph.toString());
+	
+
+	//console.log(graph.toString());
 
     function animate() {
         graph.tick();
