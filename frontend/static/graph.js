@@ -1,3 +1,7 @@
+import { GraphZoom } from "./zoom.js";
+
+
+
 const burger_button = document.querySelector('.dropdown-toggle');
 const burger_menu = document.querySelector('.dropdown-items');
 
@@ -52,33 +56,33 @@ class Edge{
 
     /**
     * @param {SVGLineElement} DOM_line_object
-    * @param {Node} leftNode
-    * @param {Node} rightNode
+    * @param {Node} sourceNode
+    * @param {Node} destinationNode
     */
 
-	constructor(DOM_line_object, leftNode, rightNode){
+	constructor(DOM_line_object, sourceNode, destinationNode){
 
 		/** @type {SVGLineElement} */
 		this.DOM_line_object = DOM_line_object;
 
 		/** @type {Node} */
-		this.leftNode = leftNode;
+		this.sourceNode = sourceNode;
 
 		/** @type {Node} */
-		this.rightNode = rightNode;
+		this.destinationNode = destinationNode;
 
 		//TODO!!!
-		//this.directed = False (NOTE: Directed from left to right)
-		//this.Cyclic = False
+		//this.directed = False (NOTE: If undirected, 
+		//this.Cyclic = False		it doesnt matter which is the source and which is the destination node!)
 	}
 
 	toString(){
 		return "LEFT: \n" +
 				"---------------------\n" +
-				this.leftNode.toString()  +
+				this.sourceNode.toString()  +
 				"RIGHT: \n" +
 				"---------------------\n" +
-				this.rightNode.toString() +
+				this.destinationNode.toString() +
 				"\n";
 	}	
 }
@@ -99,6 +103,9 @@ class Graph{
         /** @type {HTMLDivElement} */
         this.DOM_div_graph_object = DOM_div_graph_object;
 		
+		/** @type {SVGSVGElement}*/
+        this.DOM_svg_canvas = this.DOM_div_graph_object.querySelector(".graph-canvas");
+
         /** @type {string} */
         this.id = DOM_div_graph_object.id;
 
@@ -108,13 +115,18 @@ class Graph{
         /** @type {Edge[]} */
         this.edgeList = this.#getEdgeList();
 
-        let DOM_svg_canvas = this.DOM_div_graph_object.querySelector(".graph-canvas");
+		/** @type {Number} */
+		this.canvasWidth = this.DOM_svg_canvas.viewBox.baseVal.width;
 
 		/** @type {Number} */
-		this.canvasWidth = DOM_svg_canvas.viewBox.baseVal.width;
+		this.canvasHeight = this.DOM_svg_canvas.viewBox.baseVal.height;
 
-		/** @type {Number} */
-		this.canvasHeight = DOM_svg_canvas.viewBox.baseVal.height;
+		this.#createSubcomponents();
+	}
+
+	#createSubcomponents(){
+		new GraphZoom(this.DOM_svg_canvas); //Makes zooming work!
+		new LayoutConfigManager(this.layoutCalculator); //Makes the sliders work!
 	}
 
 
@@ -149,13 +161,13 @@ class Graph{
 		DOM_graph_edges.forEach(function(DOM_edge){
 
 			//We get each Edge's Node IDs.
-			const leftNode_id = DOM_edge.getAttribute("left-node");
-        	const rightNode_id = DOM_edge.getAttribute("right-node");
+			const sourceNode_id = DOM_edge.getAttribute("source-node");
+        	const destinationNode_id = DOM_edge.getAttribute("destination-node");
 
-			let leftNode = nodeMap.get(leftNode_id);
-			let rightNode = nodeMap.get(rightNode_id);
+			let sourceNode = nodeMap.get(sourceNode_id);
+			let destinationNode = nodeMap.get(destinationNode_id);
 
-			let edge = new Edge(DOM_edge, leftNode, rightNode);
+			let edge = new Edge(DOM_edge, sourceNode, destinationNode);
 			edgeList.push(edge);
 		});
 
@@ -188,11 +200,11 @@ class Graph{
 
 			let DOM_edge = edge.DOM_line_object;
 
-			DOM_edge.setAttribute("x1", edge.leftNode.x);
-			DOM_edge.setAttribute("y1", edge.leftNode.y);
+			DOM_edge.setAttribute("x1", edge.sourceNode.x);
+			DOM_edge.setAttribute("y1", edge.sourceNode.y);
 
-			DOM_edge.setAttribute("x2", edge.rightNode.x);
-			DOM_edge.setAttribute("y2", edge.rightNode.y);
+			DOM_edge.setAttribute("x2", edge.destinationNode.x);
+			DOM_edge.setAttribute("y2", edge.destinationNode.y);
 		});
 
 	}
@@ -258,11 +270,11 @@ class LayoutAdjustmentCalculator{
 		const calculator_this = this;
 
 	    graph.edgeList.forEach(function(edge) {
-	      	let leftNode = edge.leftNode;
-		    let rightNode = edge.rightNode;
+	      	let sourceNode = edge.sourceNode;
+		    let destinationNode = edge.destinationNode;
 
-		    let dx = rightNode.x - leftNode.x;
-		    let dy = rightNode.y - leftNode.y;
+		    let dx = destinationNode.x - sourceNode.x;
+		    let dy = destinationNode.y - sourceNode.y;
 		    let distance = Math.sqrt(dx * dx + dy * dy) || 1;
 
 		    // Hooke's Law spring force
@@ -270,10 +282,10 @@ class LayoutAdjustmentCalculator{
 		    let fx = (dx / distance) * force;
 		    let fy = (dy / distance) * force;
 
-		    leftNode.x_velocity += fx;
-		    leftNode.y_velocity += fy;
-		    rightNode.x_velocity -= fx;
-		    rightNode.y_velocity -= fy;
+		    sourceNode.x_velocity += fx;
+		    sourceNode.y_velocity += fy;
+		    destinationNode.x_velocity -= fx;
+		    destinationNode.y_velocity -= fy;
     	});
 
 	    // 3. Update Positions and Apply Damping and Gravity
@@ -380,13 +392,13 @@ function test_Edges(){ //OUTDATED!!!
 	DOM_edges.forEach(function(DOM_edge){
 
 		//We get each Edge's Node IDs.
-		const leftNode_id = DOM_edge.getAttribute("left-node");
-    	const rightNode_id = DOM_edge.getAttribute("right-node");
+		const sourceNode_id = DOM_edge.getAttribute("source-node");
+    	const destinationNode_id = DOM_edge.getAttribute("destination-node");
 
-		let leftNode = nodeMap.get(leftNode_id);
-		let rightNode = nodeMap.get(rightNode_id);
+		let sourceNode = nodeMap.get(sourceNode_id);
+		let destinationNode = nodeMap.get(destinationNode_id);
 
-		let edge = new Edge(DOM_edge, leftNode, rightNode);
+		let edge = new Edge(DOM_edge, sourceNode, destinationNode);
 		edges.push(edge);
 	});
 
@@ -399,11 +411,8 @@ function test_Edges(){ //OUTDATED!!!
 function test_Graph(){
 
 	let layout_calculator = new LayoutAdjustmentCalculator();
-	new LayoutConfigManager(layout_calculator); //Makes the sliders work!
-
 	let DOM_graph = document.querySelector(".graph");
 	let graph = new Graph(DOM_graph, layout_calculator);
-	
 
 	//console.log(graph.toString());
 
