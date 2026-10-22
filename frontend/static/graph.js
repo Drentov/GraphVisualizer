@@ -1,6 +1,5 @@
 import { GraphZoom } from "./zoom.js";
-
-
+import { Panner } from "./pan.js";
 
 const burger_button = document.querySelector('.dropdown-toggle');
 const burger_menu = document.querySelector('.dropdown-items');
@@ -127,6 +126,7 @@ class Graph{
 	#createSubcomponents(){
 		new GraphZoom(this.DOM_svg_canvas); //Makes zooming work!
 		new LayoutConfigManager(this.layoutCalculator); //Makes the sliders work!
+		new Panner(this.DOM_div_graph_object);
 	}
 
 

@@ -10,7 +10,7 @@ export class GraphZoom {
 		this.svg = svg;
 
 		/** @type {SVGSVGElement} */
-		this.content = svg.querySelector(".graph-content");
+		this.content = svg.querySelector(".zoom-content");
 
 
 
