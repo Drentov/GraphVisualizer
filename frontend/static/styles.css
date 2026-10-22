@@ -260,6 +260,66 @@ footer{
   pointer-events: none;
 }
 
+.graph {
+  position: relative;
+}
+
+.pan-controls {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 10;
+
+  display: grid;
+  grid-template-columns: repeat(3, 40px);
+  grid-template-rows: repeat(3, 40px);
+  gap: 1px;
+}
+
+.pan-controls button {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+
+  font-size: 20px;
+  line-height: 1;
+
+  color: #ffffff;
+
+  background-color: #3498db;
+  border: 3px solid #1f618d;
+  border-radius: 5px;
+
+  cursor: pointer;
+}
+
+.pan-controls button:hover {
+  background-color: #1f618d;
+}
+
+.pan-controls button:active {
+  background-color: #777777;
+}
+
+.pan-up {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.pan-left {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.pan-down {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.pan-right {
+  grid-column: 3;
+  grid-row: 2;
+}
 
 
 /*responsive design section incoming*/
