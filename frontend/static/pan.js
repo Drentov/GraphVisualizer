@@ -39,10 +39,10 @@ class PanControls {
         this.DOM_div_graph.appendChild(this.DOM_div_controls);
     
         this.buttonDirectionList = [
-	        ["." + button_classes_list[0],  0, -1],
-	        ["." + button_classes_list[2],  0, 1],
-	        ["." + button_classes_list[1],  -1, 0],
-	        ["." + button_classes_list[3],  1, 0]
+	        ["." + button_classes_list[0],  0, 1],
+	        ["." + button_classes_list[2],  0, -1],
+	        ["." + button_classes_list[1],  1, 0],
+	        ["." + button_classes_list[3],  -1, 0]
     	];
     }
 
