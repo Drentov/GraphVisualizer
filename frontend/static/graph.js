@@ -70,9 +70,8 @@ class Edge{
 		/** @type {Node} */
 		this.destinationNode = destinationNode;
 
-		//TODO!!!
-		//this.directed = False (NOTE: If undirected, 
-		//this.Cyclic = False		it doesnt matter which is the source and which is the destination node!)
+		/** @type {Boolean} */
+		this.directed = this.DOM_line_object.getAttribute("directed") === "true";
 	}
 
 	toString(){
@@ -82,6 +81,8 @@ class Edge{
 				"RIGHT: \n" +
 				"---------------------\n" +
 				this.destinationNode.toString() +
+				"\n" +
+				"directed: " + this.directed +
 				"\n";
 	}	
 }
@@ -361,7 +362,7 @@ function test_Nodes(){
 
 }
 
-function test_Edges(){ //OUTDATED!!!
+function test_Edges(){
 
 	//We first load the Nodes.
 	/** @type {Node[]} */
@@ -426,3 +427,4 @@ function test_Graph(){
 
 
 test_Graph();
+test_Edges();
