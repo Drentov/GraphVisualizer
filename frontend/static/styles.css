@@ -244,6 +244,13 @@ footer{
 }
 
 .node circle {
+  r: 24;
+  fill: #3498db;
+  stroke: #1f618d;
+  stroke-width: 2;
+}
+
+defs polygon {
   fill: #3498db;
   stroke: #1f618d;
   stroke-width: 2;
@@ -321,6 +328,10 @@ footer{
   grid-row: 2;
 }
 
+/*all edges with directed="true" attribute will have an arrow attached to them!*/
+.edge[directed="true"] {
+  marker-end: url(#arrowhead);
+}
 
 /*responsive design section incoming*/
 /*the point of this is to moke the webpage look good on many different devices*/
