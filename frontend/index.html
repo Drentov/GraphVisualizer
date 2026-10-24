@@ -58,7 +58,7 @@
                     <marker id="arrowhead"
                             markerWidth="22.5"
                             markerHeight="22.5"
-                            refX="42"
+                            refX="40"
                             refY="11.25"
                             orient="auto"
                             markerUnits="userSpaceOnUse">
@@ -72,25 +72,42 @@
 
                         <!-- Edges -->
                         <g class="edges">
-                            <line class="edge"
-                                  source-node="A"
-                                  destination-node="B"
-                                  x1="150" y1="100"
-                                  x2="300" y2="200" />
+                            
+                            <path class="edge"
+                                source-node="A"
+                                destination-node="B"
+                                d="M 150 100 Q 225 150 300 200"
+                            />          
 
-                            <line class="edge"
+                            <!--line class="edge"
                                   source-node="A"
                                   destination-node="C"
                                   directed="true"
                                   x1="150" y1="100"
-                                  x2="450" y2="200" />
+                                  x2="450" y2="200" -->
 
+                            <!--
+                                THE PATH ELEMENT: 
+                                M 50 100 = start at the left end
+                                Q quadratic "bezier" curve
+                                300 0 = put the control point of the bend there
+                                (BY DEFAULT set it to the line's center point!)
+                                250 100 = end at the right end
+                            -->
 
-                            <line class="edge"
-                                  source-node="B"
-                                  destination-node="C"
-                                  x1="300" y1="200"
-                                  x2="450" y2="200" />
+                            <path class="edge"
+                                source-node="A"
+                                destination-node="C"
+                                directed="true"
+                                d="M 150 100 Q 300 150 450 200"
+                            />
+
+                            <path class="edge"
+                                source-node="B"
+                                destination-node="C"
+                                d="M 300 200 Q 325 200 450 200"
+                            />
+
                         </g>
 
                         <!-- Nodes -->

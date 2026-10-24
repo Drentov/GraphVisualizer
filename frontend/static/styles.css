@@ -243,7 +243,13 @@ footer{
 .edge {
   stroke: var(--background-color);
   stroke-width: 3;
+  fill: none;
   pointer-events: stroke;
+}
+
+/*all edges with directed="true" attribute will have an arrow attached to them!*/
+.edge[directed="true"] {
+  marker-end: url(#arrowhead);
 }
 
 .edge:hover{ /*nothing...*/
@@ -336,11 +342,6 @@ footer{
 .pan-right {
   grid-column: 3;
   grid-row: 2;
-}
-
-/*all edges with directed="true" attribute will have an arrow attached to them!*/
-.edge[directed="true"] {
-  marker-end: url(#arrowhead);
 }
 
 /*responsive design section incoming*/

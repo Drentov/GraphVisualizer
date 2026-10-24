@@ -54,15 +54,15 @@ class Node{
 class Edge{
 
     /**
-    * @param {SVGLineElement} DOM_line_object
+    * @param {SVGPathElement} DOM_path_object
     * @param {Node} sourceNode
     * @param {Node} destinationNode
     */
 
-	constructor(DOM_line_object, sourceNode, destinationNode){
+	constructor(DOM_path_object, sourceNode, destinationNode){
 
 		/** @type {SVGLineElement} */
-		this.DOM_line_object = DOM_line_object;
+		this.DOM_path_object = DOM_path_object;
 
 		/** @type {Node} */
 		this.sourceNode = sourceNode;
@@ -70,9 +70,50 @@ class Edge{
 		/** @type {Node} */
 		this.destinationNode = destinationNode;
 
+		/** @type {Number} */
+		this.curveOffset = 100;
+
 		/** @type {Boolean} */
-		this.directed = this.DOM_line_object.getAttribute("directed") === "true";
+		this.directed = this.DOM_path_object.getAttribute("directed") === "true";
 	}
+
+	/**
+ 	* @returns {{x: number, y: number}} The "bezier" curve's control point.
+ 	*/
+	getCurveControlCoordinates(){
+
+		const x1 = this.sourceNode.x;
+		const y1 = this.sourceNode.y;
+		const x2 = this.destinationNode.x;
+		const y2 = this.destinationNode.y;
+
+		// Direction of the edge
+		const dx = x2 - x1;
+		const dy = y2 - y1;
+
+		// Length of the edge
+		const length = Math.sqrt(dx * dx + dy * dy);
+
+		// Normalized perpendicular direction
+		const perpendicularX = -dy / length;
+		const perpendicularY = dx / length;
+
+
+		// Midpoint, offset perpendicular to the edge
+		const controlX = (x1 + x2) / 2
+		    + perpendicularX * this.curveOffset;
+
+		const controlY = (y1 + y2) / 2
+		    + perpendicularY * this.curveOffset;
+
+	    var controlTuple = {
+	    	x: controlX,
+	    	y: controlY
+	    }
+
+	    return controlTuple;
+	}
+
 
 	toString(){
 		return "LEFT: \n" +
@@ -199,15 +240,16 @@ class Graph{
 
 		this.edgeList.forEach(function(edge){
 
-			let DOM_edge = edge.DOM_line_object;
+			let DOM_edge = edge.DOM_path_object;
 
-			DOM_edge.setAttribute("x1", edge.sourceNode.x);
-			DOM_edge.setAttribute("y1", edge.sourceNode.y);
+			const controlTuple = edge.getCurveControlCoordinates();
 
-			DOM_edge.setAttribute("x2", edge.destinationNode.x);
-			DOM_edge.setAttribute("y2", edge.destinationNode.y);
+			DOM_edge.setAttribute("d",
+   				`M ${edge.sourceNode.x} ${edge.sourceNode.y}
+				Q ${controlTuple.x} ${controlTuple.y}
+				${edge.destinationNode.x} ${edge.destinationNode.y}`
+   			);
 		});
-
 	}
 }
 
@@ -427,4 +469,4 @@ function test_Graph(){
 
 
 test_Graph();
-test_Edges();
+//test_Edges();
