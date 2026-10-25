@@ -1,3 +1,5 @@
+import { LayoutAdjustmentCalculator } from "./layout_adjustment_calculator.js";
+
 //Hooks the calculator_object's properties up with the UI sliders
 
 export class LayoutConfigManager{

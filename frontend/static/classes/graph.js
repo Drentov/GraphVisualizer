@@ -1,7 +1,4 @@
-import { GraphZoom } from "./zoom.js";
-import { Panner } from "./pan.js";
-import { LayoutAdjustmentCalculator} from "./layout_adjustment_calculator.js"
-import { LayoutConfigManager } from "./layout_config_manager.js";
+import { ForcePair } from "./force_pair.js";
 
 export class Node{
 
@@ -45,6 +42,9 @@ export class Node{
 
 export class Edge{
 
+	/** @type {Number} */
+	static curveIncreaseOffsetAmount = 80;
+
     /**
     * @param {SVGPathElement} DOM_path_object
     * @param {Node} sourceNode
@@ -63,7 +63,7 @@ export class Edge{
 		this.destinationNode = destinationNode;
 
 		/** @type {Number} */
-		this.curveOffset = 100;
+		this.curveOffset = 0;
 
 		/** @type {Boolean} */
 		this.directed = this.DOM_path_object.getAttribute("directed") === "true";
@@ -125,13 +125,9 @@ export class Graph{
 
 	/**
 	* @param {HTMLDivElement} DOM_div_graph_object
-	* @param {LayoutAdjustmentCalculator} layout_calculator
 	*/
 
-	constructor(DOM_div_graph_object, layout_calculator){
-
-        /** @type {LayoutAdjustmentCalculator} */
-        this.layoutCalculator = layout_calculator;
+	constructor(DOM_div_graph_object){
 
         /** @type {HTMLDivElement} */
         this.DOM_div_graph_object = DOM_div_graph_object;
@@ -148,19 +144,14 @@ export class Graph{
         /** @type {Edge[]} */
         this.edgeList = this.#getEdgeList();
 
+        /** @type {ForcePair[]} */
+        this.forcePairs = this.#getForcePairs();
+
 		/** @type {Number} */
 		this.canvasWidth = this.DOM_svg_canvas.viewBox.baseVal.width;
 
 		/** @type {Number} */
 		this.canvasHeight = this.DOM_svg_canvas.viewBox.baseVal.height;
-
-		this.#createSubcomponents();
-	}
-
-	#createSubcomponents(){
-		new GraphZoom(this.DOM_svg_canvas); //Makes zooming work!
-		new LayoutConfigManager(this.layoutCalculator); //Makes the sliders work!
-		new Panner(this.DOM_div_graph_object);
 	}
 
 
@@ -208,6 +199,61 @@ export class Graph{
 		return edgeList;
 	}
 
+	#getForcePairs() {
+
+		/** @type {ForcePair[]} */
+		const forcePairList = [];
+
+	   	/** @type {Map<Node, Map<Node, ForcePair>>} */
+		const connectionsMap = new Map();
+
+		this.edgeList.forEach(function(edge){
+
+	        const side1 = edge.sourceNode;
+    		const side2 = edge.destinationNode;
+
+    		//We try to find an existing pair.
+    		//Only queriing one direction is fine, since we added it to both sides
+    		//if such a pair was already encountered!
+    		let forcePair = connectionsMap.get(side1)?.get(side2);
+
+    		if(!forcePair){
+
+    			//If none found, create one!
+    			forcePair = new ForcePair(side1, side2);
+
+    			forcePairList.push(forcePair);
+
+    			//Register the pair in both directions
+    			if(!connectionsMap.has(side1)){
+    				connectionsMap.set(side1, new Map());
+    			}
+
+    			if(!connectionsMap.has(side2)){
+    				connectionsMap.set(side2, new Map());
+    			}
+
+	            connectionsMap.get(side1).set(side2, forcePair);
+            	connectionsMap.get(side2).set(side1, forcePair);
+    		}
+
+    		//IMPORTANT! We associate each edge with a forcePair!
+    		forcePair.associate(edge);
+		});
+
+		return forcePairList;
+
+		/*
+		CONCEPTUALLY:
+	
+		{
+			"A" : {"B" : ForcePair1},
+			"B" : {"A" : ForcePair1}
+		}
+		*/
+	}
+
+
 	toString(){
 		return "Graph ID: " + this.id + "\n" +
 			   "Nodes:\n\n" +
@@ -216,11 +262,9 @@ export class Graph{
 			   this.edgeList.map(edge => edge.toString()).join("\n") + "\n";
 	}
 
-	//This function updates the graph in every interval.
-	tick(){
-		
-		//This sets all of the NODE's DATA to the next frame's position
-		this.layoutCalculator.createNextState(this);
+
+
+	refresh(){
 
 		//What is left is actually displaying said change, and also, updating the edges.
 
@@ -243,4 +287,5 @@ export class Graph{
    			);
 		});
 	}
+
 }
