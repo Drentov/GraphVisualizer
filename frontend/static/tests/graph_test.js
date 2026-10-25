@@ -74,13 +74,21 @@ function test_Graph(){
 	let graph = new Graph(DOM_graph, layout_calculator);
 
 	console.log(graph.toString());
+}
+
+
+function test_GraphManager(){
+
+
+	let DOM_graph = document.querySelector(".graph");
+	let graph_manager = new GraphManger(DOM_graph);
 
     function animate() {
-        graph.tick();
+        graph_manager.tick();
         requestAnimationFrame(animate);
     }
 
 	animate();
 }
 
-export {test_Graph, test_Nodes, test_Edges};
+export {test_GraphManager, test_Graph, test_Nodes, test_Edges};

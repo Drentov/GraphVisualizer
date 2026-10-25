@@ -5,13 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Graph Explorer</title>
     <link rel="stylesheet" type="text/css" href="static/styles.css">
+    
+    <script type="module" src="static/misc/site_ui_element_controls.js"></script>
     <script type="module" src="static/classes/zoom.js"></script>
     <script type="module" src="static/classes/pan.js"></script>
+    
     <script type="module" src="static/classes/layout_adjustment_calculator.js"></script>
     <script type="module" src="static/classes/layout_config_manager.js"></script>
+    
+    <script type="module" src="static/classes/force_pair.js"></script>
     <script type="module" src="static/classes/graph.js"></script>
+    <script type="module" src="static/classes/graph_manager.js"></script>
+
     <script type="module" src="static/tests/graph_test.js"></script>
-    <script type="module" src="static/misc/site_ui_element_controls.js"></script>
+
     <script type="module" src="static/main.js"></script>
 
 </head>
@@ -79,19 +86,6 @@
                         <!-- Edges -->
                         <g class="edges">
                             
-                            <path class="edge"
-                                source-node="A"
-                                destination-node="B"
-                                d="M 150 100 Q 225 150 300 200"
-                            />          
-
-                            <!--line class="edge"
-                                  source-node="A"
-                                  destination-node="C"
-                                  directed="true"
-                                  x1="150" y1="100"
-                                  x2="450" y2="200" -->
-
                             <!--
                                 THE PATH ELEMENT: 
                                 M 50 100 = start at the left end
@@ -101,9 +95,30 @@
                                 250 100 = end at the right end
                             -->
 
+
+                            <path class="edge"
+                                source-node="A"
+                                destination-node="B"
+                                d="M 150 100 Q 225 150 300 200"
+                            />          
+
                             <path class="edge"
                                 source-node="A"
                                 destination-node="C"
+                                directed="true"
+                                d="M 150 100 Q 300 150 450 200"
+                            />
+
+                            <path class="edge"
+                                source-node="A"
+                                destination-node="C"
+                                directed="true"
+                                d="M 150 100 Q 300 150 450 200"
+                            />
+
+                            <path class="edge"
+                                source-node="C"
+                                destination-node="A"
                                 directed="true"
                                 d="M 150 100 Q 300 150 450 200"
                             />

@@ -26,7 +26,7 @@ export class GraphZoom {
 
 
 		/** @type {Number}*/
-        this.minScale = 0.25;
+        this.minScale = 0.1;
         
         /** @type {Number}*/
         this.maxScale = 4;
@@ -37,7 +37,7 @@ export class GraphZoom {
 
 	
 		//Zooming is controlled by the mouse wheel
-		this.svg.addEventListener("wheel", (event) =>{
+		this.svg.addEventListener("wheel", (event) => {
 			this.handleWheel(event);
 		}, {passive: false});
 	}

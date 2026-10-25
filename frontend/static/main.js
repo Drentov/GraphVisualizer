@@ -1,15 +1,13 @@
-import {test_Graph, test_Nodes, test_Edges} from "./tests/graph_test.js";
-import {LayoutAdjustmentCalculator} from "./classes/layout_adjustment_calculator.js"
-import {Graph} from "./classes/graph.js";
+import {test_Graph, test_Nodes, test_Edges, test_GraphManager} from "./tests/graph_test.js";
+import { GraphManger } from "./classes/graph_manager.js";
 
 function main(){
 
-	let layout_calculator = new LayoutAdjustmentCalculator();
 	let DOM_graph = document.querySelector(".graph");
-	let graph = new Graph(DOM_graph, layout_calculator);
+	let graph_manager = new GraphManger(DOM_graph);
 
     function animate() {
-        graph.tick();
+        graph_manager.tick();
         requestAnimationFrame(animate);
     }
 
@@ -21,6 +19,7 @@ function testAll(){
 	test_Edges();
 	test_Nodes();
 	test_Graph();
+	test_GraphManager();
 }
 
 main();

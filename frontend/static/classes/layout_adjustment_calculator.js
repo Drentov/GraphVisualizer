@@ -1,11 +1,16 @@
+import { Graph } from "./graph.js";
+
 //Calculates the forces that order the graph into a nice shape
 
 export class LayoutAdjustmentCalculator{
 
-	constructor(){
+	/**
+	* @param {Graph} graph 
+	*/
+	constructor(graph){
 
-		//Hypeparameters
-		//TODO: hook them up to the UI sliders.
+		/** @type {Graph} */
+		this.graph = graph;
 
 		/** @type {Number} */
 	    this.kRepulsion = 100;  // How strongly nodes push each other apart
@@ -20,21 +25,20 @@ export class LayoutAdjustmentCalculator{
 
 	//Computes a single step/frame of the physics simulation
 
-	/**
-	* @param {Graph} graph 
-	*/
-	createNextState(graph){
+
+	createNextState(){
 
 	    // 1. Repulsive Forces: Every node pushes every other node away
-	    for (let i = 0; i < graph.nodeList.length; i++) {
+	    for (let i = 0; i < this.graph.nodeList.length; i++) {
 	      
 	      	/** @type {Node} */
-	      	let nodeA = graph.nodeList[i];
+	      	let nodeA = this.graph.nodeList[i];
 		      
-	      	for (let j = i + 1; j < graph.nodeList.length; j++) {
+	      	for (let j = i + 1; j < this.graph.nodeList.length; j++) {
 		        
 		        /** @type {Node} */
-		        let nodeB = graph.nodeList[j];
+
+		        let nodeB = this.graph.nodeList[j];
 		        
 		        let dx = nodeB.x - nodeA.x;
 		        let dy = nodeB.y - nodeA.y;
@@ -58,9 +62,9 @@ export class LayoutAdjustmentCalculator{
 
 		const calculator_this = this;
 
-	    graph.edgeList.forEach(function(edge) {
-	      	let sourceNode = edge.sourceNode;
-		    let destinationNode = edge.destinationNode;
+	    this.graph.forcePairs.forEach(function(forcePair) {
+	      	let sourceNode = forcePair.sideA;
+		    let destinationNode = forcePair.sideB;
 
 		    let dx = destinationNode.x - sourceNode.x;
 		    let dy = destinationNode.y - sourceNode.y;
@@ -78,12 +82,12 @@ export class LayoutAdjustmentCalculator{
     	});
 
 	    // 3. Update Positions and Apply Damping and Gravity
-        graph.nodeList.forEach(function(node) {
+        this.graph.nodeList.forEach(node => {
 			
 			// Small gravitational pull toward center to avoid floating away
 			let gravity = 0.01;
-			node.x_velocity += (graph.canvasWidth / 2 - node.x) * gravity;
-			node.y_velocity += (graph.canvasHeight / 2 - node.y) * gravity;
+			node.x_velocity += (this.graph.canvasWidth / 2 - node.x) * gravity;
+			node.y_velocity += (this.graph.canvasHeight / 2 - node.y) * gravity;
 
 			// Apply forces to positions
 			node.x += node.x_velocity;
