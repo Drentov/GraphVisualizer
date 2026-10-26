@@ -1,4 +1,5 @@
-import { Edge, Graph } from "./graph.js";
+import { Graph } from "./graph_subelements/graph.js";
+import { Edge } from "./graph_subelements/egde.js";
 
 export class LayoutCurvatureCalculator{
 

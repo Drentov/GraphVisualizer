@@ -1,6 +1,7 @@
 import {LayoutAdjustmentCalculator} from "../classes/layout_adjustment_calculator.js"
-import { Node, Edge, Graph } from "../classes/graph.js";
-
+import { Node } from "../classes/graph_subelements/node.js";
+import { Edge } from "../classes/graph_subelements/egde.js";
+import { Graph } from "../classes/graph_subelements/graph.js";
 
 function test_Nodes(){
 

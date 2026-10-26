@@ -13,8 +13,10 @@
     <script type="module" src="static/classes/layout_adjustment_calculator.js"></script>
     <script type="module" src="static/classes/layout_config_manager.js"></script>
     
-    <script type="module" src="static/classes/force_pair.js"></script>
-    <script type="module" src="static/classes/graph.js"></script>
+    <script type="module" src="static/classes/graph_subelements/force_pair.js"></script>
+    <script type="module" src="static/classes/graph_subelements/node.js"></script>
+    <script type="module" src="static/classes/graph_subelements/egde.js"></script>
+    <script type="module" src="static/classes/graph_subelements/graph.js"></script>
     <script type="module" src="static/classes/graph_manager.js"></script>
 
     <script type="module" src="static/tests/graph_test.js"></script>
@@ -96,34 +98,35 @@
                             -->
 
 
-                            <path class="edge"
+                            <path id="1" class="edge"
                                 source-node="A"
                                 destination-node="B"
                                 d="M 150 100 Q 225 150 300 200"
                             />          
 
-                            <path class="edge"
+                            <path id="2" class="edge"
                                 source-node="A"
                                 destination-node="C"
                                 directed="true"
                                 d="M 150 100 Q 300 150 450 200"
                             />
 
-                            <path class="edge"
+                            <path id="3" class="edge"
                                 source-node="A"
                                 destination-node="C"
                                 directed="true"
                                 d="M 150 100 Q 300 150 450 200"
                             />
 
-                            <path class="edge"
+                            <path id="4" class="edge"
                                 source-node="C"
                                 destination-node="A"
                                 directed="true"
+                                weight="7"
                                 d="M 150 100 Q 300 150 450 200"
                             />
 
-                            <path class="edge"
+                            <path id="5" class="edge"
                                 source-node="B"
                                 destination-node="C"
                                 d="M 300 200 Q 325 200 450 200"
@@ -133,17 +136,17 @@
 
                         <!-- Nodes -->
                         <g class="nodes">
-                            <g class="node" data-node-id="A" transform="translate(150, 100)">
+                            <g id="A" class="node" transform="translate(150, 100)">
                                 <circle/>
                                 <text text-anchor="middle" dy="5">A</text>
                             </g>
 
-                            <g class="node" data-node-id="B" transform="translate(300, 200)">
+                            <g id="B" class="node" transform="translate(300, 200)">
                                 <circle/>
                                 <text text-anchor="middle" dy="5">B</text>
                             </g>
 
-                            <g class="node" data-node-id="C" transform="translate(450, 200)">
+                            <g id="C" class="node"transform="translate(450, 200)">
                                 <circle/>
                                 <text text-anchor="middle" dy="5">C</text>
                             </g>

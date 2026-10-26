@@ -1,4 +1,4 @@
-import { Graph } from "./graph.js";
+import { Graph } from "./graph_subelements/graph.js";
 
 //Calculates the forces that order the graph into a nice shape
 

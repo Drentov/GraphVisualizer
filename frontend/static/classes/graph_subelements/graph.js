@@ -1,125 +1,6 @@
 import { ForcePair } from "./force_pair.js";
-
-export class Node{
-
-	//These make autocomplete function!
-    /**
-     * @param {SVGGElement} DOM_g_object
-     */
-
-	constructor(DOM_g_object){
-
-		/** @type {SVGGElement} */
-		this.DOM_g_object = DOM_g_object;
-		
-		let transform = DOM_g_object.transform.baseVal.getItem(0);
-
-		/** @type {number} */
-		this.x = transform.matrix.e;
-		
-		/** @type {number} */
-		this.y = transform.matrix.f;
-
-		/** @type {string}*/
-		this.id = DOM_g_object.getAttribute("data-node-id");
-
-		//Parameters needed for force calculation.
-        
-        /** @type {number} */
-        this.x_velocity = 0;
-
-        /** @type {number} */
-        this.y_velocity = 0;
-	}
-
-	toString(){
-		return "id = " + this.id  + ", \n" + 
-			   "x = " + this.x  + ", \n" +
-			   "y = " + this.y  + ", \n";
-	}
-
-}
-
-export class Edge{
-
-	/** @type {Number} */
-	static curveIncreaseOffsetAmount = 80;
-
-    /**
-    * @param {SVGPathElement} DOM_path_object
-    * @param {Node} sourceNode
-    * @param {Node} destinationNode
-    */
-
-	constructor(DOM_path_object, sourceNode, destinationNode){
-
-		/** @type {SVGLineElement} */
-		this.DOM_path_object = DOM_path_object;
-
-		/** @type {Node} */
-		this.sourceNode = sourceNode;
-
-		/** @type {Node} */
-		this.destinationNode = destinationNode;
-
-		/** @type {Number} */
-		this.curveOffset = 0;
-
-		/** @type {Boolean} */
-		this.directed = this.DOM_path_object.getAttribute("directed") === "true";
-	}
-
-	/**
- 	* @returns {{x: number, y: number}} The "bezier" curve's control point.
- 	*/
-	getCurveControlCoordinates(){
-
-		const x1 = this.sourceNode.x;
-		const y1 = this.sourceNode.y;
-		const x2 = this.destinationNode.x;
-		const y2 = this.destinationNode.y;
-
-		// Direction of the edge
-		const dx = x2 - x1;
-		const dy = y2 - y1;
-
-		// Length of the edge
-		const length = Math.sqrt(dx * dx + dy * dy);
-
-		// Normalized perpendicular direction
-		const perpendicularX = -dy / length;
-		const perpendicularY = dx / length;
-
-
-		// Midpoint, offset perpendicular to the edge
-		const controlX = (x1 + x2) / 2
-		    + perpendicularX * this.curveOffset;
-
-		const controlY = (y1 + y2) / 2
-		    + perpendicularY * this.curveOffset;
-
-	    var controlTuple = {
-	    	x: controlX,
-	    	y: controlY
-	    }
-
-	    return controlTuple;
-	}
-
-
-	toString(){
-		return "LEFT: \n" +
-				"---------------------\n" +
-				this.sourceNode.toString()  +
-				"RIGHT: \n" +
-				"---------------------\n" +
-				this.destinationNode.toString() +
-				"\n" +
-				"directed: " + this.directed +
-				"\n";
-	}	
-}
-
+import { Edge } from "./egde.js";
+import { Node } from "./node.js";
 
 export class Graph{
 
@@ -266,7 +147,7 @@ export class Graph{
 
 	refresh(){
 
-		//What is left is actually displaying said change, and also, updating the edges.
+		//Refreshes the visual look of the graph, also updates the edges positions.
 
 		this.nodeList.forEach(function(node){
 
@@ -278,13 +159,15 @@ export class Graph{
 
 			let DOM_edge = edge.DOM_path_object;
 
-			const controlTuple = edge.getCurveControlCoordinates();
+			const controlTuple = edge.getCurveControlPointCoordinates();
 
 			DOM_edge.setAttribute("d",
    				`M ${edge.sourceNode.x} ${edge.sourceNode.y}
 				Q ${controlTuple.x} ${controlTuple.y}
 				${edge.destinationNode.x} ${edge.destinationNode.y}`
    			);
+
+   			edge.updateDOMWeightElement();
 		});
 	}
 
