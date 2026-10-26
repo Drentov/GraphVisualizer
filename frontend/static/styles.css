@@ -252,6 +252,14 @@ footer{
   marker-end: url(#arrowhead);
 }
 
+.edge-weight {
+  font-size: 16px;
+  paint-order: stroke;
+  stroke: var(--background-color);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
 .edge:hover{
   stroke: var(--focus-color);
   filter: drop-shadow(0 0 1px var(--focus-color));

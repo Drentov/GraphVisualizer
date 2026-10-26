@@ -16,8 +16,8 @@ function main(){
 
 function testAll(){
 
-	test_Edges();
 	test_Nodes();
+	test_Edges();
 	test_Graph();
 	test_GraphManager();
 }

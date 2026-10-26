@@ -1,3 +1,6 @@
+import { Node } from "./node.js";
+import { Edge } from "./egde.js";
+
 //The purpose of this class is to help calculate
 //the attraction force that will keep the graph in shape!
 //Sicne there can be duplicates, we must not

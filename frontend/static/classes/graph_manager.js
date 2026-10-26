@@ -2,7 +2,7 @@ import { GraphZoom } from "./zoom.js";
 import { Panner } from "./pan.js";
 import { LayoutAdjustmentCalculator} from "./layout_adjustment_calculator.js"
 import { LayoutConfigManager } from "./layout_config_manager.js";
-import {Graph} from "./graph.js";
+import {Graph} from "./graph_subelements/graph.js";
 import { LayoutCurvatureCalculator } from "./layout_curvature_calculator.js";
 
 export class GraphManger{
