@@ -1,25 +1,33 @@
 """
     Type detection and conversion support,
-    in accordance with the specifications.
+    we support the data types mentioned in
+    the specifications.
 """
-from datetime import date, datetime
-from typing import Any
+from datetime import date
+from typing import Union
+
+SupportedValue = Union[bool, int, float, date, str]
+SupportedType = type[SupportedValue]
+SUPPORTED_TYPES = (bool, int, float, date, str)
 
 class TypeManager:
 
     @staticmethod
-    def detect_type(value: Any) -> type:
+    def detect_type(value: SupportedValue) -> SupportedType:
 
-        if isinstance(value, bool):  return bool
-        if isinstance(value, int):   return int
-        if isinstance(value, float): return float
-        if isinstance(value, date): return date
-        if isinstance(value, str): return TypeManager._detect_string_type(value)
+        #loops over all supported types until it finds what the type of value is
+        for supported_type in SUPPORTED_TYPES:
+
+            if supported_type is str:
+                if isinstance(value, str): return TypeManager.detect_string_type(value)
+
+            if isinstance(value, supported_type): return supported_type
+
         return str
 
 
     @staticmethod
-    def _detect_string_type(value: str) -> type:
+    def detect_string_type(value: str) -> SupportedType:
 
         possible_converters = [
             (int, int),
@@ -40,7 +48,10 @@ class TypeManager:
 
 
     @staticmethod
-    def _convert_to_type(value: Any, target_type: type) -> Any:
+    def convert_to_type(value: object, target_type: SupportedType) -> SupportedValue:
+
+        if target_type not in SUPPORTED_TYPES:
+            raise TypeError(f"Unsupported target type: {target_type}")
 
         if target_type is date and isinstance(value, str) :
             return date.fromisoformat(value)
@@ -49,10 +60,10 @@ class TypeManager:
 
 
     @staticmethod
-    def validate_and_convert(value: Any, target_type: type) -> Any:
+    def validate_and_convert(value: object, target_type: SupportedType) -> SupportedValue:
         """Validate and convert value"""
         try:
-            return TypeManager._convert_to_type(value, target_type)
+            return TypeManager.convert_to_type(value, target_type)
         except (ValueError, TypeError) as error:
             raise ValueError(f"Cannot convert {value} to {target_type}: {str(error)}")
 
