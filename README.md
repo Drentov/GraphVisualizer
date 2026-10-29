@@ -1,6 +1,6 @@
 # GraphVisualizer
 
-![GraphVisualizer Screenshot](docs/assets/screenshot.png)
+![GraphVisualizer Screenshot](docs/assets/screenshot.PNG)
 
 ## Description
 
