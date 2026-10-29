@@ -4,11 +4,14 @@
     the specifications.
 """
 from datetime import date
-from typing import Union
+from typing import Union, Dict
 
 SupportedValue = Union[bool, int, float, date, str]
 SupportedType = type[SupportedValue]
 SUPPORTED_TYPES = (bool, int, float, date, str)
+
+#usefult for to_dict functions, where 'attribute' is a nestled dictionary
+SupportedValueOrDict = Union[SupportedValue, Dict[str, SupportedValue]]
 
 class TypeManager:
 
@@ -48,7 +51,7 @@ class TypeManager:
 
 
     @staticmethod
-    def convert_to_type(value: object, target_type: SupportedType) -> SupportedValue:
+    def _convert_to_type(value: object, target_type: SupportedType) -> SupportedValue:
 
         if target_type not in SUPPORTED_TYPES:
             raise TypeError(f"Unsupported target type: {target_type}")
@@ -63,7 +66,7 @@ class TypeManager:
     def validate_and_convert(value: object, target_type: SupportedType) -> SupportedValue:
         """Validate and convert value"""
         try:
-            return TypeManager.convert_to_type(value, target_type)
+            return TypeManager._convert_to_type(value, target_type)
         except (ValueError, TypeError) as error:
             raise ValueError(f"Cannot convert {value} to {target_type}: {str(error)}")
 

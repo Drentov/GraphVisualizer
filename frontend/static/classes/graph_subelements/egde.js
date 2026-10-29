@@ -36,7 +36,7 @@ export class Edge{
 		this.DOM_edge_weight_text = this.#createDOMWeightElement();
 
 		/** @type {Boolean} */
-		this.directed = this.DOM_path_object.getAttribute("directed") === "true";
+		this.directed = this.DOM_path_object.getAttribute("directed") === "True";
 	}
 
 	#createDOMWeightElement() {

@@ -3,8 +3,8 @@
 """
 from copy import deepcopy
 from typing import Any, Dict
-from ...type_manager import TypeManager, SupportedValue, SupportedType
-from ..abstract.node_base import BaseNode
+from ...type_manager import TypeManager, SupportedValue, SupportedType, SupportedValueOrDict
+from ..interfaces.node_base import BaseNode
 
 class Node(BaseNode):
 
@@ -80,3 +80,17 @@ class Node(BaseNode):
         if not isinstance(other, Node):
             return False
         return self.node_id == other.node_id
+
+    def to_dict(self) -> Dict[str, SupportedValueOrDict]:
+
+        """
+        Convert node to dictionary for serialization, and HTML display.
+        Caller is responsible for converting all attributes to its preferred type for storage/display
+        Example: for converting all values to str, use TypeManager.validate_and_convert(value, str)
+        """
+
+        return {
+            'id': self.node_id,
+            'attributes': self.attributes,
+        }
+

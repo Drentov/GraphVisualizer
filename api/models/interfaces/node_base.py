@@ -3,7 +3,8 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict
 
-from ...type_manager import SupportedValue, SupportedType
+from ...type_manager import SupportedValue, SupportedType, SupportedValueOrDict
+
 
 class BaseNode(ABC):
 
@@ -50,4 +51,9 @@ class BaseNode(ABC):
     @abstractmethod
     def __eq__(self, other: object) -> bool:
         """Compare nodes by ID."""
+        pass
+
+    @abstractmethod
+    def to_dict(self) -> Dict[str, SupportedValueOrDict]:
+        """Convert entire node to dictionary"""
         pass
