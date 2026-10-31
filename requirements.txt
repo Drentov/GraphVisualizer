@@ -1,0 +1,12 @@
+# ─────────────────────────────────────────────────────────
+# Graph Structure Visualizer — Python dependencies
+# ─────────────────────────────────────────────────────────
+# Install with: pip install -r requirements.txt
+#
+# Note: The project's own packages (api, core, plugins) are
+#       installed separately via their setup.py files.
+#       This file lists only third-party dependencies.
+# ─────────────────────────────────────────────────────────
+
+# Web frameworks
+Flask>=3.0
