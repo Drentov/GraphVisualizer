@@ -7,7 +7,7 @@ Tests interact through the BaseNode interface.
 import unittest
 from datetime import date
 
-from api.models.implementation.node import Node
+from api.models.node import Node
 
 class TestNode(unittest.TestCase):
 

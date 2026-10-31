@@ -6,9 +6,9 @@ Tests interact through the BaseGraph interface.
 
 import unittest
 
-from api.models.implementation.graph import Graph
-from api.models.implementation.node import Node
-from api.models.implementation.edge import Edge
+from api.models.graph import Graph
+from api.models.node import Node
+from api.models.edge import Edge
 
 
 class TestGraph(unittest.TestCase):

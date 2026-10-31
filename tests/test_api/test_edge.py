@@ -6,8 +6,8 @@ Tests interact through the BaseEdge interface.
 
 import unittest
 
-from api.models.implementation.edge import Edge
-from api.models.implementation.node import Node
+from api.models.edge import Edge
+from api.models.node import Node
 
 
 class TestEdge(unittest.TestCase):

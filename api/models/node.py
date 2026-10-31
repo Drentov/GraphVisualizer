@@ -3,7 +3,7 @@
 """
 from copy import deepcopy
 from typing import Any, Dict, Optional
-from ...type_manager import TypeManager, SupportedValue, SupportedValueOrDict, SupportedType
+from api.type_manager import TypeManager, SupportedValue, SupportedValueOrDict, SupportedType
 
 
 class Node:

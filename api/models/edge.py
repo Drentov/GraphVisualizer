@@ -4,7 +4,7 @@
 from copy import deepcopy
 from typing import Any, Dict, Optional
 from .node import Node
-from ...type_manager import TypeManager, SupportedValue, SupportedValueOrDict
+from api.type_manager import TypeManager, SupportedValue, SupportedValueOrDict
 
 
 class Edge:
