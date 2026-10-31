@@ -2,11 +2,11 @@
     Node model - representation of a node in the graph
 """
 from copy import deepcopy
-from typing import Any, Dict
-from ...type_manager import TypeManager, SupportedValue, SupportedType, SupportedValueOrDict
-from ..interfaces.node_base import BaseNode
+from typing import Any, Dict, Optional
+from ...type_manager import TypeManager, SupportedValue, SupportedValueOrDict, SupportedType
 
-class Node(BaseNode):
+
+class Node:
 
     def __init__(self, node_id: Any, **attributes):
 
@@ -33,7 +33,7 @@ class Node(BaseNode):
 
         self.attributes[key] = converted_value
 
-    def get_attribute(self, key: str) -> Any:
+    def get_attribute(self, key: str) -> Optional[SupportedValue]:
         return self.attributes.get(key)
 
     def update_attribute(self, key: str, value: Any) -> None:
@@ -45,11 +45,10 @@ class Node(BaseNode):
 
     def get_attribute_type(self, key: str) -> SupportedType:
 
-        attribute_type = type(self.attributes.get(key))
-        if attribute_type is None:
+        if key not in self.attributes:
             raise KeyError("The given attribute does not exist, so it lacks a type!")
 
-        return attribute_type
+        return type(self.attributes[key])
 
     def get_all_attributes(self) -> Dict[str, SupportedValue]:
         """Returns a copy, ensuring that the original will not get modified!"""

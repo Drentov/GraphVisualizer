@@ -6,10 +6,8 @@ from copy import deepcopy
 from typing import Dict, List, Any, Optional, Set
 from .node import Node
 from .edge import Edge
-from ..interfaces.graph_base import BaseGraph
 
-
-class Graph(BaseGraph):
+class Graph:
 
     def __init__(self, graph_id: Any):
         """
@@ -111,8 +109,68 @@ class Graph(BaseGraph):
         return len(self.edges)
 
     def has_cycle(self) -> bool:
-        #TODO! (preferrrably with breadth first search)
-        raise NotImplementedError("Sorry, not yet impplemented!")
+        """
+        Check if the graph has a cycle.
+        Supports mixed (directed/undirected) graphs.
+        """
+
+        visited_node_ids_set = set()
+        in_exploration_ids_set = set()
+
+        def depth_first_search(search_node_id: str, parent_edge: Optional[Edge]) -> bool:
+
+            visited_node_ids_set.add(search_node_id)
+            in_exploration_ids_set.add(search_node_id)
+
+            node = self.nodes[search_node_id]
+
+            for edge in self._get_traversable_edges(node):
+
+                if edge is parent_edge:
+                    continue
+
+                neighbor = edge.get_other_node(node)
+
+                if not neighbor and edge.source_node == edge.destination_node:
+                    neighbor = node  # Self loop (circular looping edge)
+
+                neighbor_id = neighbor.node_id
+
+                if neighbor_id not in visited_node_ids_set:
+                    if depth_first_search(neighbor_id, edge):
+                        return True
+
+                elif neighbor_id in in_exploration_ids_set:
+                    return True
+
+            in_exploration_ids_set.remove(search_node_id)
+            return False
+
+        for node_id in self.nodes:
+            if node_id not in visited_node_ids_set:
+                if depth_first_search(node_id, None):
+                    return True
+
+        return False
+
+    def _get_traversable_edges(self, node: Node) -> List[Edge]:
+        """
+        Returns all edges that can be traversed from the given node:
+        1. Directed edges originating from this node.
+        2. Undirected edges connected to this node.
+        """
+
+        result = []
+
+        for edge in self._adjacency_pairs.get(node.node_id, []):
+
+            if edge.source_node == node:
+                result.append(edge)
+
+            elif not edge.directed and edge.destination_node == node:
+                result.append(edge)
+
+        return result
 
     def get_subgraph_by_nodes(self, node_ids: Set[str]) -> 'Graph':
 

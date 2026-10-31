@@ -4,11 +4,10 @@
 from copy import deepcopy
 from typing import Any, Dict, Optional
 from .node import Node
-from ..interfaces.edge_base import BaseEdge
 from ...type_manager import TypeManager, SupportedValue, SupportedValueOrDict
 
 
-class Edge(BaseEdge):
+class Edge:
     """
         Class for an edge between two nodes.
         An edge can be directed or undirected.
@@ -63,7 +62,7 @@ class Edge(BaseEdge):
         """Get source and target nodes"""
         return self.source_node
 
-    def get_target_node(self) -> Node:
+    def get_destination_node(self) -> Node:
         return self.destination_node
 
     def get_other_node(self, node: Node) -> Optional[Node]:

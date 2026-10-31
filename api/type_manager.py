@@ -56,6 +56,9 @@ class TypeManager:
         if target_type not in SUPPORTED_TYPES:
             raise TypeError(f"Unsupported target type: {target_type}")
 
+        if isinstance(value, target_type): #If no type conversion necessary, do nothing!
+            return value
+
         if target_type is date and isinstance(value, str) :
             return date.fromisoformat(value)
 
