@@ -161,11 +161,22 @@ export class Graph{
 
 			const controlTuple = edge.getCurveControlPointCoordinates();
 
-			DOM_edge.setAttribute("d",
-   				`M ${edge.sourceNode.x} ${edge.sourceNode.y}
-				Q ${controlTuple.x} ${controlTuple.y}
-				${edge.destinationNode.x} ${edge.destinationNode.y}`
-   			);
+			if(controlTuple.length == 1){
+				DOM_edge.setAttribute("d",
+	   				`M ${edge.sourceNode.x} ${edge.sourceNode.y}
+					Q ${controlTuple[0].x} ${controlTuple[0].y}
+					${edge.destinationNode.x} ${edge.destinationNode.y}`
+   				);
+			}
+			else if(controlTuple.length == 2){
+				DOM_edge.setAttribute("d",
+	   				`M ${edge.sourceNode.x} ${edge.sourceNode.y}
+					C ${controlTuple[0].x} ${controlTuple[0].y},
+					  ${controlTuple[1].x} ${controlTuple[1].y}
+					${edge.destinationNode.x} ${edge.destinationNode.y}`
+   				);
+			}
+
 
    			edge.updateDOMWeightElement();
 		});

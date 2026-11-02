@@ -18,6 +18,15 @@ export class LayoutCurvatureCalculator{
 
 			let edgeList = forcePair.associatedEdges;
 
+			//Case if the edge points to itself!
+			if(forcePair.sideA == forcePair.sideB){
+	            edgeList.forEach(function(edge, index){
+	                edge.curveOffset = index * Edge.curveIncreaseOffsetAmount;
+	            });
+
+	            return;
+			}
+
 			//if an even number, one can remain as a straight line!
 			let needToSkipFirstOdd = (edgeList.length % 2) === 1; 
 
@@ -33,11 +42,10 @@ export class LayoutCurvatureCalculator{
 				let edge1 = edgeList[i-1];
 				let edge2 = edgeList[i];
 
-				edge1.curveOffset = 
-					(forcePair.isNotInverted(edge1)) ? i * Edge.curveIncreaseOffsetAmount : -i * Edge.curveIncreaseOffsetAmount;
-				
-				edge2.curveOffset = 
-					(forcePair.isNotInverted(edge2)) ? -i * Edge.curveIncreaseOffsetAmount : i * Edge.curveIncreaseOffsetAmount;
+				edge1.curveOffset = (forcePair.isNotInverted(edge1)) ? 
+					i * Edge.curveIncreaseOffsetAmount : -i * Edge.curveIncreaseOffsetAmount;
+				edge2.curveOffset = (forcePair.isNotInverted(edge2)) ?
+					-i * Edge.curveIncreaseOffsetAmount : i * Edge.curveIncreaseOffsetAmount;
 			
 				i+=2;
 			}

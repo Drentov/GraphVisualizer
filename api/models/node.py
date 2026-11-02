@@ -80,6 +80,9 @@ class Node:
             return False
         return self.node_id == other.node_id
 
+    def __hash__(self):
+        return hash(self.node_id) #allows the use of Node objects as dictionary keys!
+
     def to_dict(self) -> Dict[str, SupportedValueOrDict]:
 
         """

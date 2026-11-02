@@ -207,6 +207,10 @@ class Graph:
     def __repr__(self) -> str:
         return f"Graph({self.graph_id}, nodes={list(self.nodes)}, edges={list(self.edges)})"
 
+    def __hash__(self):
+        return hash(self.graph_id) #allows the use of Graph objects as dictionary keys!
+
+
     def to_dict(self) -> Dict:
         return {
             'id': self.graph_id,
