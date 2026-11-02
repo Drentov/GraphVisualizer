@@ -36,7 +36,7 @@ export class Edge{
 		this.DOM_edge_weight_text = this.#createDOMWeightElement();
 
 		/** @type {Boolean} */
-		this.directed = this.DOM_path_object.getAttribute("directed") === "True";
+		this.directed = this.DOM_path_object.getAttribute("directed") === "true";
 	}
 
 	#createDOMWeightElement() {
@@ -80,32 +80,54 @@ export class Edge{
 	}
 
 	/**
- 	* @returns {{x: number, y: number}} the cuved line's midpoint!
+ 	* @returns {{x: number, y: number}} the curved line's midpoint!
  	*/
 	#findBezierCurvedLineMidpoint(){
 
-		const point1 = {
-			x : this.sourceNode.x,
-			y : this.sourceNode.y
-		}
+	    const point1 = {
+	        x: this.sourceNode.x,
+	        y: this.sourceNode.y
+	    };
 
-		const point2 = {
-			x : this.destinationNode.x,
-			y : this.destinationNode.y
-		}
+	    const point2 = {
+	        x: this.destinationNode.x,
+	        y: this.destinationNode.y
+	    };
 
-		const controlPoint = this.getCurveControlPointCoordinates();
+	    const controlPoints = this.getCurveControlPointCoordinates();
 
-		const midPoint = {
-			x : point1.x * 0.25 + controlPoint.x * 0.5 + point2.x * 0.25,
-			y : point1.y * 0.25 + controlPoint.y * 0.5 + point2.y * 0.25
-		}
+	    //One control point case
+	    if(controlPoints.length === 1){
 
-		return midPoint;
+	        const controlPoint = controlPoints[0];
+
+	        return {
+	            x: point1.x * 0.25 + controlPoint.x * 0.5 + point2.x * 0.25,
+	            y: point1.y * 0.25 + controlPoint.y * 0.5 + point2.y * 0.25
+	        };
+	    }
+
+	    //Two control points case
+	    const firstControlPoint = controlPoints[0];
+	    const secondControlPoint = controlPoints[1];
+
+	    return {
+	        x: point1.x * 0.125
+	            + firstControlPoint.x * 0.375
+	            + secondControlPoint.x * 0.375
+	            + point2.x * 0.125,
+
+	        y: point1.y * 0.125
+	            + firstControlPoint.y * 0.375
+	            + secondControlPoint.y * 0.375
+	            + point2.y * 0.125
+	    };
 	}
 
 	/**
- 	* @returns {{x: number, y: number}} The "bezier" curve's control point.
+ 	* @returns {[{x: number, y: number}] | [{x: number, y: number}, {x: number, y: number}]}
+ 	* The "bezier" curve's control point.
+ 	* There can be one or two of them!
  	*/
 	getCurveControlPointCoordinates(){
 
@@ -113,6 +135,26 @@ export class Edge{
 		const y1 = this.sourceNode.y;
 		const x2 = this.destinationNode.x;
 		const y2 = this.destinationNode.y;
+
+
+		//Special case, when there is a self loop:
+		if(this.sourceNode == this.destinationNode){
+
+			const offset = this.curveOffset / 2;
+
+			const firstControlTuple = {
+			    x: this.sourceNode.x - 100 - offset,
+			    y: this.sourceNode.y - 100 - offset
+			};
+
+			const secondControlTuple = {
+			    x: this.sourceNode.x + 100 + offset,
+			    y: this.sourceNode.y - 100 - offset
+			};
+
+			return [firstControlTuple, secondControlTuple];
+		}
+
 
 		// Direction of the edge
 		const dx = x2 - x1;
@@ -133,12 +175,12 @@ export class Edge{
 		const controlY = (y1 + y2) / 2
 		    + perpendicularY * this.curveOffset;
 
-	    var controlTuple = {
+	    let controlTuple = {
 	    	x: controlX,
 	    	y: controlY
 	    }
 
-	    return controlTuple;
+	    return [controlTuple];
 	}
 
 

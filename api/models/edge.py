@@ -105,6 +105,9 @@ class Edge:
             return False
         return self.edge_id == other.edge_id
 
+    def __hash__(self):
+        return hash(self.edge_id) #allows the use of Edge objects as dictionary keys!
+
     def to_dict(self) -> Dict[str, SupportedValueOrDict]:
 
         """
