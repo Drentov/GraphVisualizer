@@ -10,3 +10,6 @@
 
 # Web frameworks
 Flask>=3.0
+
+#String Html validatiors
+html5lib
