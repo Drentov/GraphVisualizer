@@ -18,3 +18,10 @@ class VisualizerInterface(ABC):
         #The caller is responsible for sending said string to the frontend
 
         pass
+
+    @abstractmethod
+    def get_unique_name(self) -> str:
+
+        #Should return a unique name for the visual plugin,
+        #so the frontend can recognize which visual view has been returned
+        pass
