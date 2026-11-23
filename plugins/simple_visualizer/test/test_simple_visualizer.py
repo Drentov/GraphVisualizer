@@ -1,4 +1,5 @@
 import unittest
+import html5lib
 from api.models.edge import Edge
 from api.models.graph import Graph
 from api.models.node import Node
@@ -45,6 +46,49 @@ class TestSimpleGraphVisualizer(unittest.TestCase):
         self.graph.add_edge(self.edge_ab)
         self.graph.add_edge(self.edge_bc)
         self.graph.add_edge(self.edge_cd)
+
+
+    #############################################################################
+    #TEST WITH THE MAIN CRITERIA
+    #This tests whether the generated string would be valid in a html webpage!
+    #############################################################################
+    def test_to_visual_form(self):
+
+        html = self.simple_visualizer.to_visual_form(self.graph)
+
+        complete_html = f"""<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Simple Visualizer Test</title>
+    </head>
+    <body>
+        {html}
+    </body>
+    </html>
+    """
+
+        #In case manual checking is required, use this to write it out to a file!
+        #with open("test_output.html", "w", encoding="utf-8") as file:
+        #    file.write(complete_html)
+        #print("HTML written to test_output.html")
+
+        # Parse and check HTML
+        parser = html5lib.HTMLParser(strict=False)
+        parser.parse(complete_html)
+
+        # Collect parsing errors
+        errors = parser.errors
+
+        self.assertEqual(
+            len(errors),
+            0,
+            "\n".join(
+                f"Line {position[0]}, Column {position[1]}: {error}"
+                for position, error, _ in errors
+            )
+        )
+
 
     # ---------------------------------------------------------
     # Initialization tests
@@ -382,27 +426,6 @@ class TestSimpleGraphVisualizer(unittest.TestCase):
 
         self.assertIn('viewBox="0 0 800 600"', html)
 
-    #This actually generates a html example document!
-    def test_to_visual_form(self):
-
-        html = self.simple_visualizer.to_visual_form(self.graph)
-
-        complete_html = f"""<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Simple Visualizer Test</title>
-    </head>
-    <body>
-        {html}
-    </body>
-    </html>
-    """
-
-        with open("test_output.html", "w", encoding="utf-8") as file:
-            file.write(complete_html)
-
-        print("HTML written to test_output.html")
 
 if __name__ == "__main__":
     unittest.main()
