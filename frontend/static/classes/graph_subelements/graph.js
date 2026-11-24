@@ -147,7 +147,7 @@ export class Graph{
 
 	refresh(){
 
-		//Refreshes the visual look of the graph, also updates the edges positions.
+		//Refreshes the visual look of the graph, also updates the edge's positions.
 
 		this.nodeList.forEach(function(node){
 
@@ -155,7 +155,8 @@ export class Graph{
 			DOM_node.setAttribute("transform", "translate(" + node.x + ", " + node.y + ")");
 		});
 
-		this.edgeList.forEach(function(edge){
+
+		this.edgeList.forEach(function(edge){ //To "curve" the edge lines if necessary...
 
 			let DOM_edge = edge.DOM_path_object;
 

@@ -56,7 +56,13 @@ class PanControls {
 
         return button;
     }
+
+    destroy() {
+        this.DOM_div_controls.remove();  //Destroys the entire button pane!
+    }
 }
+
+
 
 export class Panner{
 
@@ -82,6 +88,9 @@ export class Panner{
 		this.animationFrame = null;
 		this.lastFrameTime = null;
 
+        /** @type {[EventTarget, string, EventListener][]} */
+        this.eventListeners = []; //Stored for later removal!
+
 
         /** @type {Number} */
         this.offsetX = 0;
@@ -101,7 +110,7 @@ export class Panner{
 
     		const button = this.DOM_div_graph.querySelector(selector);
 
-    		button.addEventListener("pointerdown", (event) =>{
+    		const pointerDown = (event) => {
 
     			event.preventDefault();
 
@@ -118,24 +127,33 @@ export class Panner{
     					(time) => this.#panLoop(time)
 					);
     			}
-    		});
+    		};
 
-    		button.addEventListener("pointerup", () => {
-    			this.#stopPanning();
-    		})
+    		const pointerUp = () => this.#stopPanning();
+            const pointerCancel = () => this.#stopPanning();
+            const lostPointerCapture = () => this.#stopPanning();
 
-	        button.addEventListener("pointercancel", () => {
-	            this.#stopPanning();
-	        });
+            button.addEventListener("pointerdown", pointerDown);
+            button.addEventListener("pointerup", pointerUp);
+            button.addEventListener("pointercancel", pointerCancel);
+            button.addEventListener("lostpointercapture", lostPointerCapture);
+    	
+            // Store the references for later removal.
+            this.eventListeners.push(
+                [button, "pointerdown", pointerDown],
+                [button, "pointerup", pointerUp],
+                [button, "pointercancel", pointerCancel],
+                [button, "lostpointercapture", lostPointerCapture]
+            );
+        }
 
-	        button.addEventListener("lostpointercapture", () => {
-	            this.#stopPanning();
-	        });
-    	}
+        const windowBlur = () => this.#stopPanning();
+        window.addEventListener("blur", windowBlur);
 
-        window.addEventListener("blur", () => {
-        		this.#stopPanning();
-		});
+        // Store the references for later removal.
+        this.eventListeners.push(
+            [window, "blur", windowBlur]
+        );
     }
 
 	#panLoop(time) {
@@ -183,5 +201,29 @@ export class Panner{
             "transform",
             `translate(${this.offsetX}, ${this.offsetY})`
         );
+    }
+
+
+    destroy() {
+
+        // Stop the animation loop.
+        if (this.animationFrame !== null) {
+            cancelAnimationFrame(this.animationFrame);
+            this.animationFrame = null;
+        }
+
+        // Stop any ongoing panning.
+        this.#stopPanning();
+
+        // Remove all registered event listeners.
+        for (const [element, event, handler] of this.eventListeners) {
+            element.removeEventListener(event, handler);
+        }
+
+        //Clear the list.
+        this.eventListeners = [];
+
+        // Remove the dynamically created controls.
+        this.PanControls.destroy();
     }
 }
