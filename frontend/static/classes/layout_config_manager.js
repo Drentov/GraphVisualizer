@@ -22,16 +22,32 @@ export class LayoutConfigManager{
 	
 	    //Registering listeners
 
-	    this.DOM_repulsion.addEventListener("input", () => {
-	    	this.calculator_object.kRepulsion = Number(this.DOM_repulsion.value);
-	    });
+        this.handleRepulsion = this.handleRepulsion.bind(this);
+        this.handleAttraction = this.handleAttraction.bind(this);
+        this.handleDamping = this.handleDamping.bind(this);
 
-	    this.DOM_attraction.addEventListener("input", () => {
-	    	this.calculator_object.kAttraction = Number(this.DOM_attraction.value);
-	    });
-
-    	this.DOM_damping.addEventListener("input", () => {
-	    	this.calculator_object.damping = Number(this.DOM_damping.value);
-	    });
+        this.DOM_repulsion.addEventListener("input", this.handleRepulsion);
+        this.DOM_attraction.addEventListener("input", this.handleAttraction);
+        this.DOM_damping.addEventListener("input", this.handleDamping);
 	}
+
+	//All of these are used as callbacks with 'this' explicitly bound,
+	//so as to not cause confusion!
+    handleRepulsion() {
+        this.calculator_object.kRepulsion = Number(this.DOM_repulsion.value);
+    }
+
+    handleAttraction() {
+        this.calculator_object.kAttraction = Number(this.DOM_attraction.value);
+    }
+
+    handleDamping() {
+        this.calculator_object.damping = Number(this.DOM_damping.value);
+    }
+
+    destroy() {
+        this.DOM_repulsion.removeEventListener("input", this.handleRepulsion);
+        this.DOM_attraction.removeEventListener("input", this.handleAttraction);
+        this.DOM_damping.removeEventListener("input", this.handleDamping);
+    }
 }

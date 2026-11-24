@@ -18,6 +18,9 @@ class SimpleVisualizer(VisualizerInterface):
         else:                                         #on which all points will be initially drawn!
             self._circle_radius = canvas_width / 4
 
+    def get_unique_name(self)-> str:
+        return "simple-visualizer"
+
     def to_visual_form(self, graph: Graph) -> str:
 
         grap_node_positions_map = self._create_graph_node_positions(graph)  # a map of {Node : (x, y)} so we do not have to recalculate edge positions!

@@ -12,8 +12,6 @@ export class GraphZoom {
 		/** @type {SVGSVGElement} */
 		this.content = svg.querySelector(".zoom-content");
 
-
-
 		/** @type {Number}*/
 		this.scale = 1;
 
@@ -22,8 +20,6 @@ export class GraphZoom {
 
 		/** @type {Number}*/
 		this.translateY = 0;
-
-
 
 		/** @type {Number}*/
         this.minScale = 0.1;
@@ -34,12 +30,16 @@ export class GraphZoom {
         /** @type {Number}*/
         this.zoomFactor = 1.1;
 
+        //binding it so 'this' stays consistent
+        
+        this.handleWheelBound = this.handleWheel.bind(this);
 
-	
 		//Zooming is controlled by the mouse wheel
-		this.svg.addEventListener("wheel", (event) => {
-			this.handleWheel(event);
-		}, {passive: false});
+        this.svg.addEventListener(
+        	"wheel",
+        	this.handleWheelBound, 
+        	{passive: false}
+        );
 	}
 
     /**
@@ -86,5 +86,12 @@ export class GraphZoom {
             "transform",
             `translate(${this.translateX} ${this.translateY}) scale(${this.scale})`
         );
-    }	
+    }
+
+    destroy() {
+    	this.svg.removeEventListener(
+    		"wheel",
+    		this.handleWheelBound
+		);
+	}
 }
